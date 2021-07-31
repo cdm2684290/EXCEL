@@ -1,0 +1,1 @@
+pyinstaller -F EXCEL.py
