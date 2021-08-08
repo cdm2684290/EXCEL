@@ -1,6 +1,6 @@
 import tkinter as tk
 from tkinter import*
-import  pandas
+import pandas
 import tkinter.filedialog
 import os
 import xlrd
@@ -37,44 +37,31 @@ class interfaceclass:
         DB_excel=pandas.read_excel(dict_1['路径'],sheet_name=0)
         DB_excel.loc[:,'日期']=0#增加一个空列
         DB_excel.loc[:,'时间']=0#增加一个空列
-        DB_value['日期']=DB_excel['日期时间'].dt.date
-        DB_value['时间']=DB_excel['日期时间'].dt.time
+        DB_value['日期']=pandas.to_datetime(DB_excel['日期时间']).dt.date
+        DB_value['时间']=pandas.to_datetime(DB_excel['日期时间']).dt.time
         DB_value['姓名']=DB_excel['姓名']
-        list_name=DB_value['姓名'].unique()#统计人名
-        list_time=DB_value['日期'].unique()#统计天数
-        k=len(list_name)#统计人数
-        j=len(list_time)#统计天数
-        i=0#天数
-        h=0#人数
-        print(k)
-        print(j)
-        while h<k:
-            df1=df1=DB_value[(DB_value['姓名']==list_name[h])]
-            while i<j:
-                df2=df1[df1['日期']==list_time[i]]
-                a=df2['时间'].min()
-                b=df2['时间'].max()
-                df10=df2[(df2['时间']==a)|(df2['时间']==b)]
-                DB_1=pandas.concat([DB_1,df10])
-                i=i+1
-            if i == 26 :
-               h=h+1
-               i=0
-        print(DB_1)
-        DB_1.to_excel(dict_1['存储路径'],sheet_name='sheet1')#写入EXCEL 
-           #df1=DB_value[(DB_value['姓名']==list_name[0])&(DB_value['日期']==list_time[i])]
-           #a=df1['时间'].min()
-           #b=df1['时间'].max()
-           #df100=df1[(df1['时间']==a)|(df1['时间']==b)]
-           #DB_1=pandas.concat([DB_1,df100])
-           #i=i+1
-          
-        print(DB_1)
         
-        #DB_excel_list_name[0]=DB_excel[DB_excel['时间']<'8:30:00']
-        #print(DB_excel_1)
-        #print(list_time)
-       
+        list_name=DB_value['姓名'].unique()#统计人名
+        #list_time=DB_value['日期'].unique()#统计天数
+        k=len(list_name)#统计人数
+        h=0#人数
+        
+        while h<k:
+             df1=DB_value[(DB_value['姓名']==list_name[h])]
+             list_time=df1['日期'].unique()
+             j=len(list_time)
+             i=0
+             while i<j:
+                  df2=df1[df1['日期']==list_time[i]]
+                  a=df2['时间'].min()
+                  b=df2['时间'].max()
+                  df10=df2[(df2['时间']==a)|(df2['时间']==b)]
+                  DB_1=pandas.concat([DB_1,df10])
+                  i=i+1
+                  print(i)
+             h=h+1
+        print(DB_1)
+        DB_1.to_excel(dict_1['存储路径'],sheet_name='sheet1')
     label_1=tk.Label(window_1,text='目标路径',width=10,height=1,anchor='w',justify='right')#row行，colum列
     label_1.place(x = 1,y = 10,anchor='nw')
 
